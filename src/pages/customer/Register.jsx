@@ -29,30 +29,28 @@ export default function Register() {
       password: "",
     },
     validationSchema,
-    onSubmit: (values) => {
-      // alert(JSON.stringify(values, null, 2));
-      // console.log("ini", values);
-      const form = values;
-      axiosInstance
-        .post("/users/register", form)
-        .then((response) => {
-          const message = response.data.message;
-          toast(handleErrorMessage(message), {
-            position: toast.POSITION.TOP_RIGHT,
-            type: toast.TYPE.SUCCESS,
-          });
-          navigate("/login");
-        })
-        .catch((error) => {
-          const message = error.response?.data?.message;
-
-          toast(handleErrorMessage(message), {
-            position: toast.POSITION.TOP_RIGHT,
-            type: toast.TYPE.ERROR,
-          });
-        });
-    },
+    onSubmit: handleRegister,
   });
+  function handleRegister(form) {
+    axiosInstance
+      .post("/users/register", form)
+      .then((response) => {
+        const message = response.data.message;
+        toast(handleErrorMessage(message), {
+          position: toast.POSITION.TOP_RIGHT,
+          type: toast.TYPE.SUCCESS,
+        });
+        navigate("/login");
+      })
+      .catch((error) => {
+        const message = error.response?.data?.message;
+
+        toast(handleErrorMessage(message), {
+          position: toast.POSITION.TOP_RIGHT,
+          type: toast.TYPE.ERROR,
+        });
+      });
+  }
 
   return (
     <section className="d-flex justify-content-center align-items-center min-vh-100">
