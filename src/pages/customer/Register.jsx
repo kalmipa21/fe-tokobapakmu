@@ -1,9 +1,12 @@
 import { Button, Card, Form, InputGroup } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
+import { axiosInstance } from "../../configs/https.js";
+import { toast } from "react-toastify";
+import handleErrorMessage from "../../utils/handleErrorMessage.js";
 
 const validationSchema = Yup.object({
   full_name: Yup.string().required("Field is required").max(30),
@@ -13,6 +16,7 @@ const validationSchema = Yup.object({
 
 export default function Register() {
   const [showPass, setShowPass] = useState(false);
+  const navigate = useNavigate();
 
   function handleShowPass() {
     setShowPass(!showPass);
@@ -27,7 +31,26 @@ export default function Register() {
     validationSchema,
     onSubmit: (values) => {
       // alert(JSON.stringify(values, null, 2));
-      console.log("ini", values);
+      // console.log("ini", values);
+      const form = values;
+      axiosInstance
+        .post("/users/register", form)
+        .then((response) => {
+          const message = response.data.message;
+          toast(handleErrorMessage(message), {
+            position: toast.POSITION.TOP_RIGHT,
+            type: toast.TYPE.SUCCESS,
+          });
+          navigate("/login");
+        })
+        .catch((error) => {
+          const message = error.response?.data?.message;
+
+          toast(handleErrorMessage(message), {
+            position: toast.POSITION.TOP_RIGHT,
+            type: toast.TYPE.ERROR,
+          });
+        });
     },
   });
 
@@ -94,7 +117,7 @@ export default function Register() {
                   onChange={formik.handleChange}
                   className={formik.errors.password && "border-danger"}
                 />
-                <Button onClick={handleShowPass}>
+                <Button variant="light" onClick={handleShowPass}>
                   {showPass ? (
                     <i className="bi bi-eye"></i>
                   ) : (
