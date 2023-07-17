@@ -6,10 +6,13 @@ import {
 
 //Import component, page, layout, and auth
 import App from "../App";
+//Customer page
 import Home from "../pages/Home";
+import Login from "../pages/customer/Login";
+import Register from "../pages/customer/Register";
+
+// Negative Page
 import Error from "../pages/Error";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
 
 export default createBrowserRouter(
   createRoutesFromElements(
