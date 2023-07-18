@@ -35,6 +35,9 @@ export default function Login() {
   });
 
   function handleLogin(form) {
+    // SET LOADING
+    dispatch({ type: "SET_LOADING", value: true });
+
     axiosInstance
       .post("/users/login", form)
       .then((response) => {
@@ -65,6 +68,10 @@ export default function Login() {
           position: toast.POSITION.TOP_RIGHT,
           type: toast.TYPE.ERROR,
         });
+      })
+      .finally(() => {
+        //SET LOADING
+        dispatch({ type: "SET_LOADING", value: false });
       });
   }
 
@@ -72,7 +79,7 @@ export default function Login() {
     <section className="d-flex justify-content-center align-items-center min-vh-100">
       <Card style={{ width: "24.5rem", padding: "2rem" }}>
         <Card.Body>
-          <h4 className="heading__4 mb-4">Register</h4>
+          <h4 className="heading__4 mb-4">Login</h4>
 
           <Form onSubmit={formik.handleSubmit}>
             <Form.Group className="mb-2">
@@ -85,10 +92,13 @@ export default function Login() {
                 type="email"
                 placeholder="example@tokobapakmu.com"
                 value={formik.values.email}
+                onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                className={formik.errors.email && "border-danger"}
+                className={
+                  formik.touched.email && formik.errors.email && "border-danger"
+                }
               />
-              {formik.errors.email && (
+              {formik.touched.email && formik.errors.email && (
                 <small className="text-danger text__5">
                   {formik.errors.email}
                 </small>
@@ -106,8 +116,13 @@ export default function Login() {
                   type={showPass ? "text" : "password"}
                   placeholder="Password"
                   value={formik.values.password}
+                  onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  className={formik.errors.password && "border-danger"}
+                  className={
+                    formik.touched.password &&
+                    formik.errors.password &&
+                    "border-danger"
+                  }
                 />
                 <Button variant="light" onClick={handleShowPass}>
                   {showPass ? (
@@ -118,7 +133,7 @@ export default function Login() {
                 </Button>
               </InputGroup>
 
-              {formik.errors.password && (
+              {formik.touched.password && formik.errors.password && (
                 <small className="text-danger text__5">
                   {formik.errors.password}
                 </small>

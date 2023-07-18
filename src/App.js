@@ -7,12 +7,12 @@ import "react-toastify/dist/ReactToastify.css";
 import "../src/assets/css/loading.css";
 
 function App() {
-  const isLoading = useSelector((state) => state.loading);
+  const { isLoading } = useSelector((state) => state.loading);
   return (
     <>
       {isLoading && <Loading />}
 
-      <ToastContainer></ToastContainer>
+      <ToastContainer />
       <main className="app__main">
         <Outlet />
       </main>

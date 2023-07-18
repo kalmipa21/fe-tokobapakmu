@@ -7,6 +7,7 @@ import { useState } from "react";
 import { axiosInstance } from "../../configs/https.js";
 import { toast } from "react-toastify";
 import handleErrorMessage from "../../utils/handleErrorMessage.js";
+import { useDispatch } from "react-redux";
 
 const validationSchema = Yup.object({
   full_name: Yup.string().required("Field is required").max(30),
@@ -17,6 +18,9 @@ const validationSchema = Yup.object({
 export default function Register() {
   const [showPass, setShowPass] = useState(false);
   const navigate = useNavigate();
+
+  //REDUX STORE
+  const dispatch = useDispatch();
 
   function handleShowPass() {
     setShowPass(!showPass);
@@ -32,6 +36,9 @@ export default function Register() {
     onSubmit: handleRegister,
   });
   function handleRegister(form) {
+    // SET LOADING
+    dispatch({ type: "SET_LOADING", value: true });
+
     axiosInstance
       .post("/users/register", form)
       .then((response) => {
@@ -49,6 +56,10 @@ export default function Register() {
           position: toast.POSITION.TOP_RIGHT,
           type: toast.TYPE.ERROR,
         });
+      })
+      .finally(() => {
+        // SET LOADING
+        dispatch({ type: "SET_LOADING", value: false });
       });
   }
 
@@ -70,11 +81,16 @@ export default function Register() {
                 placeholder="Elon Musk"
                 maxLength={30}
                 value={formik.values.full_name}
+                onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                className={formik.errors.full_name && "border-danger"}
+                className={
+                  formik.touched.full_name &&
+                  formik.errors.full_name &&
+                  "border-danger"
+                }
               />
 
-              {formik.errors.full_name && (
+              {formik.touched.full_name && formik.errors.full_name && (
                 <small className="text-danger text__5">
                   {formik.errors.full_name}
                 </small>
@@ -91,10 +107,13 @@ export default function Register() {
                 type="email"
                 placeholder="example@tokobapakmu.com"
                 value={formik.values.email}
+                onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                className={formik.errors.email && "border-danger"}
+                className={
+                  formik.touched.email && formik.errors.email && "border-danger"
+                }
               />
-              {formik.errors.email && (
+              {formik.touched.email && formik.errors.email && (
                 <small className="text-danger text__5">
                   {formik.errors.email}
                 </small>
@@ -112,8 +131,13 @@ export default function Register() {
                   type={showPass ? "text" : "password"}
                   placeholder="Password"
                   value={formik.values.password}
+                  onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  className={formik.errors.password && "border-danger"}
+                  className={
+                    formik.touched.password &&
+                    formik.errors.password &&
+                    "border-danger"
+                  }
                 />
                 <Button variant="light" onClick={handleShowPass}>
                   {showPass ? (
@@ -124,7 +148,7 @@ export default function Register() {
                 </Button>
               </InputGroup>
 
-              {formik.errors.password && (
+              {formik.touched.password && formik.errors.password && (
                 <small className="text-danger text__5">
                   {formik.errors.password}
                 </small>
