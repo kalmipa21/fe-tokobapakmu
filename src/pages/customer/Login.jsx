@@ -1,4 +1,4 @@
-import { Button, Card, Form, InputGroup, Spinner } from "react-bootstrap";
+import { Button, Card, Form, InputGroup } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useFormik } from "formik";
@@ -126,7 +126,7 @@ export default function Login() {
             </Form.Group>
 
             <Button type="submit" variant="primary" className="w-100 my-4">
-              <Spinner animation="grow" /> Login
+              Login
             </Button>
           </Form>
 
