@@ -1,4 +1,4 @@
-import { Button, Card, Form, InputGroup } from "react-bootstrap";
+import { Button, Card, Form, InputGroup, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useFormik } from "formik";
@@ -7,6 +7,7 @@ import { useState } from "react";
 import { axiosInstance } from "../../configs/https.js";
 import { toast } from "react-toastify";
 import handleErrorMessage from "../../utils/handleErrorMessage.js";
+import { useDispatch } from "react-redux";
 
 const validationSchema = Yup.object({
   email: Yup.string().required("Field is required").email(),
@@ -16,6 +17,9 @@ const validationSchema = Yup.object({
 export default function Login() {
   const [showPass, setShowPass] = useState(false);
   const navigate = useNavigate();
+
+  //redux store
+  const dispatch = useDispatch();
 
   function handleShowPass() {
     setShowPass(!showPass);
@@ -34,15 +38,25 @@ export default function Login() {
     axiosInstance
       .post("/users/login", form)
       .then((response) => {
-        const { data, message } = response.data;
+        const { _id, token, role } = response.data.data;
 
-        console.log(data);
+        // set store
+        dispatch({ type: "AUTH_TOKEN", value: token });
+        dispatch({
+          type: "AUTH_USER",
+          value: { _id, role },
+        });
 
+        //set local storage
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify({ _id, role }));
+
+        const message = response.data.message;
         toast(handleErrorMessage(message), {
           position: toast.POSITION.TOP_RIGHT,
           type: toast.TYPE.SUCCESS,
         });
-        navigate("/login");
+        navigate("/");
       })
       .catch((error) => {
         const message = error.response?.data?.message;
@@ -112,7 +126,7 @@ export default function Login() {
             </Form.Group>
 
             <Button type="submit" variant="primary" className="w-100 my-4">
-              Login
+              <Spinner animation="grow" /> Login
             </Button>
           </Form>
 
