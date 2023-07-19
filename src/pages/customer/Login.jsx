@@ -1,5 +1,5 @@
 import { Button, Card, Form, InputGroup } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -16,10 +16,10 @@ const validationSchema = Yup.object({
 
 export default function Login() {
   const [showPass, setShowPass] = useState(false);
-  const navigate = useNavigate();
 
   //redux store
   const dispatch = useDispatch();
+  // const navigate = useNavigate();
 
   function handleShowPass() {
     setShowPass(!showPass);
@@ -59,7 +59,8 @@ export default function Login() {
           position: toast.POSITION.TOP_RIGHT,
           type: toast.TYPE.SUCCESS,
         });
-        navigate("/");
+        //REDIRECT TO HOME PAGE
+        window.location.href = "/";
       })
       .catch((error) => {
         const message = error.response?.data?.message;

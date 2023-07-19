@@ -7,13 +7,52 @@ import {
   Navbar,
 } from "react-bootstrap";
 import "../../assets/css/cust-navbar.css";
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { axiosInstance } from "../../configs/https";
+import { toast } from "react-toastify";
+import handleErrorMessage from "../../utils/handleErrorMessage";
 
 function ProductsNavBar() {
+  // STORE AUTH
+  const { token, user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  //   const headers = { Authorization: `Basic ${token}` };
+
+  function handleLogout() {
+    const _id = user._id;
+    dispatch({ type: "SET_LOADING", value: true });
+    axiosInstance
+      .post(`/users/${_id}/logout`)
+      .then((response) => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        // const message = response.data.message;
+        // toast(handleErrorMessage(message), {
+        //   position: toast.POSITION.TOP_RIGHT,
+        //   type: toast.TYPE.SUCCESS,
+        // });
+        // TO PAGE LOGIN
+        window.location.href = "/login";
+      })
+      .catch((error) => {
+        const message = error.response?.data?.message;
+
+        toast(handleErrorMessage(message), {
+          position: toast.POSITION.TOP_RIGHT,
+          type: toast.TYPE.ERROR,
+        });
+      })
+      .finally(() => {
+        dispatch({ type: "SET_LOADING", value: false });
+      });
+  }
   return (
     <Navbar bg="primary" expand="md" variant="dark">
       <Container>
         <Navbar.Brand className="heading__4" href="/">
-          Market.ID
+          Market.ID {token ? "ture" : "false"}
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>
@@ -39,15 +78,29 @@ function ProductsNavBar() {
           </Nav>
 
           <Nav>
-            <Button
-              variant="outline-light"
-              className="me-md-3 my-md-0 my-2 me-0"
-            >
-              Login
-            </Button>
-            <Button variant="light" className=" text-primary">
-              Register
-            </Button>
+            {token ? (
+              <>
+                <Link className="me-md-3 my-md-0 my-3 me-0 d-flex justify-content-center align-items-center btn btn-outline-light">
+                  <i className="bi bi-cart-fill"></i>
+                  <span className="sub__heading__5 ms-2">0</span>
+                </Link>
+                <Button variant="light" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="me-md-3 my-md-0 my-3 me-0 btn btn-outline-light"
+                >
+                  Login
+                </Link>
+                <Link to="/register" className=" text-primary btn btn-light">
+                  Register
+                </Link>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
