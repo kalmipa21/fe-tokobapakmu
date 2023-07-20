@@ -17,6 +17,7 @@ function ProductsNavBar() {
   // STORE AUTH
   const { token, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  // const navigate = useNavigate()
   //   const headers = { Authorization: `Basic ${token}` };
 
   function handleLogout() {
@@ -28,11 +29,11 @@ function ProductsNavBar() {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
 
-        // const message = response.data.message;
-        // toast(handleErrorMessage(message), {
-        //   position: toast.POSITION.TOP_RIGHT,
-        //   type: toast.TYPE.SUCCESS,
-        // });
+        const message = response.data.message;
+        toast(handleErrorMessage(message), {
+          position: toast.POSITION.TOP_RIGHT,
+          type: toast.TYPE.SUCCESS,
+        });
         // TO PAGE LOGIN
         window.location.href = "/login";
       })
@@ -52,7 +53,7 @@ function ProductsNavBar() {
     <Navbar bg="primary" expand="md" variant="dark">
       <Container>
         <Navbar.Brand className="heading__4" href="/">
-          Market.ID {token ? "ture" : "false"}
+          Tokobapakmu
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>
