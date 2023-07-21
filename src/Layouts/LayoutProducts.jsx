@@ -6,7 +6,7 @@ export default function LayoutProducts() {
   return (
     <>
       <ProductsNavBar />
-      <Container>
+      <Container className="pt-5">
         <Outlet />
       </Container>
     </>
