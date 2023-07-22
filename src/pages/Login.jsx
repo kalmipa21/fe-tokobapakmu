@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
-import { axiosInstance } from "../../configs/https.js";
+import { axiosInstance } from "../configs/https.js";
 import { toast } from "react-toastify";
-import handleErrorMessage from "../../utils/handleErrorMessage.js";
+import handleErrorMessage from "../utils/handleErrorMessage.js";
 import { useDispatch } from "react-redux";
 
 const validationSchema = Yup.object({

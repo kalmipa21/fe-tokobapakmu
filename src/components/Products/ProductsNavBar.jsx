@@ -1,3 +1,9 @@
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { axiosInstance } from "../../configs/https";
+import { toast } from "react-toastify";
+import handleErrorMessage from "../../utils/handleErrorMessage";
+
 import {
   Container,
   Button,
@@ -7,21 +13,38 @@ import {
   Navbar,
 } from "react-bootstrap";
 import "../../assets/css/cust-navbar.css";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { axiosInstance } from "../../configs/https";
-import { toast } from "react-toastify";
-import handleErrorMessage from "../../utils/handleErrorMessage";
+import { useState } from "react";
 
 function ProductsNavBar() {
   // STORE AUTH
   const { token, user } = useSelector((state) => state.auth);
+  const { q, sort_by } = useSelector((state) => state.product);
   const dispatch = useDispatch();
   // const navigate = useNavigate()
   //   const headers = { Authorization: `Basic ${token}` };
 
+  // STATE
+  const [params, setParams] = useState({
+    q,
+    sort_by,
+  });
+
+  function handleOnChange(event) {
+    setParams({ ...params, [event.target.name]: event.target.value });
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    // SET PARAMS Q AND SORT BY
+    dispatch({ type: "ACTION_PAGE", value: 1 });
+    dispatch({ type: "ACTION_SORT_BY", value: params.sort_by });
+    dispatch({ type: "ACTION_SEARCH", value: params.q });
+  }
+
   function handleLogout() {
     const _id = user._id;
+
     dispatch({ type: "SET_LOADING", value: true });
     axiosInstance
       .post(`/users/${_id}/logout`)
@@ -58,20 +81,33 @@ function ProductsNavBar() {
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav className=" w-100 d-flex align-items-center justify-content-center">
-            <Form className="container__search my-md-0 mt-3">
+            <Form
+              className="container__search my-md-0 mt-3"
+              onSubmit={handleSubmit}
+            >
               <InputGroup>
-                <Form.Select className="select__search">
-                  <option>Sort By</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                <Form.Select
+                  className="select__search"
+                  value={params.sort_by}
+                  name="sort_by"
+                  onChange={handleOnChange}
+                >
+                  <option value="asc">ASC</option>
+                  <option value="desc">DESC</option>
                 </Form.Select>
 
                 <Form.Control
                   className="input__search border-0"
                   placeholder="Cari produk kesayanganmu..."
+                  name="q"
+                  value={params.q}
+                  onChange={handleOnChange}
                 />
-                <Button className=" d-flex align-items-center" variant="light">
+                <Button
+                  type="submit"
+                  className=" d-flex align-items-center"
+                  variant="light"
+                >
                   <i className=" bi bi-search"></i>
                 </Button>
               </InputGroup>

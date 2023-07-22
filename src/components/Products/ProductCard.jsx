@@ -5,7 +5,7 @@ import formatCurrency from "../../utils/currency";
 export default function ProductCard(props) {
   const { product } = props;
   return (
-    <Card className=" w-100">
+    <Card className="w-100">
       <Card.Img
         variant="top"
         src={product.image ? product.image.url : defaultImg}

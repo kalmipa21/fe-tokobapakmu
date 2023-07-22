@@ -9,8 +9,8 @@ import App from "../App";
 //Layout Products
 import LayoutProducts from "../Layouts/LayoutProducts";
 //Customer page
-import Products from "../pages/Products";
-import Login from "../pages/customer/Login";
+import Products from "../pages/customer/Products";
+import Login from "../pages/Login";
 import Register from "../pages/customer/Register";
 
 //Layout Auth
