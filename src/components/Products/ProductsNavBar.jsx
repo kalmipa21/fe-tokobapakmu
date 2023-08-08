@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { axiosInstance } from "../../configs/https";
 import { toast } from "react-toastify";
@@ -78,6 +78,13 @@ function ProductsNavBar() {
         dispatch({ type: "SET_LOADING", value: false });
       });
   }
+
+  // HANDLE TO PAGE CART
+  const navigate = useNavigate();
+  function handleToCartsPage() {
+    navigate("/carts");
+  }
+
   return (
     <Navbar bg="primary" expand="md" variant="dark">
       <Container>
@@ -123,10 +130,14 @@ function ProductsNavBar() {
           <Nav>
             {token ? (
               <>
-                <Link className="me-md-3 my-md-0 my-3 me-0 d-flex justify-content-center align-items-center btn btn-outline-light">
+                <Button
+                  className="me-md-3 my-md-0 my-3 me-0 d-flex justify-content-center align-items-center btn btn-outline-light"
+                  disabled={countQty === 0}
+                  onClick={handleToCartsPage}
+                >
                   <i className="bi bi-cart-fill"></i>
                   <span className="sub__heading__5 ms-2">{countQty}</span>
-                </Link>
+                </Button>
                 <Button variant="light" onClick={handleLogout}>
                   Logout
                 </Button>
