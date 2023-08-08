@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function Products() {
   const storeParamsProduct = useSelector((state) => state.product);
+  const storeLoading = useSelector((state) => state.loading);
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({});
 
@@ -71,7 +72,43 @@ export default function Products() {
         ))}
       </Row>
 
-      {data.length ? (
+      {/* Product Not Found Display */}
+      {!storeLoading.isLoading && !data.length && (
+        <div className="d-flex justify-content-center align-items-center">
+          <h4>Product Not Found</h4>
+        </div>
+      )}
+
+      {/* PAGINATION */}
+      {!storeLoading.isLoading && (
+        <Row>
+          <Col
+            xs="12"
+            className="d-flex justify-content-end align-items-center"
+          >
+            <Form.Select
+              value={storeParamsProduct.per_page}
+              onChange={handleChange}
+              className="w-auto me-4 mb-3"
+            >
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="25">25</option>
+            </Form.Select>
+            <PaginationControl
+              page={pagination.page}
+              between={4}
+              total={pagination.total}
+              limit={pagination.per_page}
+              ellipsis={1}
+              changePage={handlePagination}
+            ></PaginationControl>
+          </Col>
+        </Row>
+      )}
+
+      {/* {data.length ? (
         <Row>
           <Col
             xs="12"
@@ -101,7 +138,7 @@ export default function Products() {
         <div className="d-flex justify-content-center align-items-center">
           <h4>Product Not Found</h4>
         </div>
-      )}
+      )} */}
     </>
   );
 }
