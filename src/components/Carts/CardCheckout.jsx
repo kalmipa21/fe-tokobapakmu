@@ -65,6 +65,25 @@ export default function CardCheckout() {
     }
   }
 
+  function handleCheckout() {
+    const cart = dataCart.map((cart) => {
+      return {
+        name: cart.name,
+        price: cart.price,
+        image: cart.image,
+        category: cart.category,
+        qty: cart.qty,
+        sub_total: cart.sub_total,
+      };
+    });
+    const dataCheckout = {
+      cart,
+      address,
+      total,
+    };
+    console.log("Checkout", dataCheckout);
+  }
+
   return (
     <Card className="w-100">
       <Card.Body>
@@ -110,6 +129,7 @@ export default function CardCheckout() {
           disabled={address._id.length === 0}
           color=" primary"
           className="w-100"
+          onClick={handleCheckout}
         >
           Checkout
         </Button>
