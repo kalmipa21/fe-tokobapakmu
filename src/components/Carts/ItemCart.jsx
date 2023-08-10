@@ -3,7 +3,7 @@ import formatCurrency from "../../utils/currency";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function ItemCart(props) {
-  const { cart, index } = props;
+  const { cart, index, isActive = false } = props;
   const storeCarts = useSelector((state) => state.carts);
   const dispatch = useDispatch();
 
@@ -43,30 +43,33 @@ export default function ItemCart(props) {
           />
           <h6 className="ms-2">{cart.name}</h6>
         </div>
+        {!isActive && <span className=" mx-2">x{cart.qty}</span>}
         <h6>{formatCurrency(cart.sub_total)}</h6>
 
-        <div>
-          <Button
-            size="sm"
-            disabled={cart.qty < 2}
-            variant={cart.qty < 2 ? "secondary" : "primary"}
-            onClick={handleSubtPerItem}
-          >
-            <i className="bi bi-dash"></i>
-          </Button>
-          <span className=" mx-2">{cart.qty}</span>
-          <Button size="sm" variant="primary" onClick={handleAddPerItem}>
-            <i className="bi bi-plus"></i>
-          </Button>
-          <Button
-            size="sm"
-            variant="danger"
-            className=" ms-2"
-            onClick={handleDeleteByIndex}
-          >
-            <i className="bi bi-trash3-fill"></i>
-          </Button>
-        </div>
+        {isActive && (
+          <div>
+            <Button
+              size="sm"
+              disabled={cart.qty < 2}
+              variant={cart.qty < 2 ? "secondary" : "primary"}
+              onClick={handleSubtPerItem}
+            >
+              <i className="bi bi-dash"></i>
+            </Button>
+            <span className=" mx-2">{cart.qty}</span>
+            <Button size="sm" variant="primary" onClick={handleAddPerItem}>
+              <i className="bi bi-plus"></i>
+            </Button>
+            <Button
+              size="sm"
+              variant="danger"
+              className=" ms-2"
+              onClick={handleDeleteByIndex}
+            >
+              <i className="bi bi-trash3-fill"></i>
+            </Button>
+          </div>
+        )}
       </Card.Body>
     </Card>
   );
