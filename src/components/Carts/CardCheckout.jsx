@@ -2,13 +2,22 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Card, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 import handleErrorMessage from "../../utils/handleErrorMessage";
 import { axiosInstance } from "../../configs/https";
 import formatCurrency from "../../utils/currency";
+import PopupCheckout from "./PopupCheckout";
 
-export default function CardCheckout() {
+export default function CardCheckout(props) {
+  const navigate = useNavigate();
+
+  const {
+    isCheckout = true,
+    detailInvoice = { address_id: "", subTotal: 0, ppn: 0, total: 0 },
+  } = props;
   const [optionAddress, setOptionAddress] = useState([]);
+  const [fullAddress, setFullAddress] = useState("-");
 
   const dispatch = useDispatch();
   const { dataCart } = useSelector((state) => state.carts);
@@ -17,8 +26,9 @@ export default function CardCheckout() {
   const ppn = subTotal * 0.01;
   const total = ppn + subTotal;
 
+  // FOR OPTION ADDRESS
   useEffect(() => {
-    if (!optionAddress.length) {
+    if (!optionAddress.length && isCheckout) {
       // SET LOADING
       dispatch({ type: "SET_LOADING", value: true });
       axiosInstance
@@ -39,9 +49,37 @@ export default function CardCheckout() {
           dispatch({ type: "SET_LOADING", value: false });
         });
     }
-  }, [optionAddress, dispatch]);
+  }, [optionAddress, dispatch, isCheckout]);
 
-  const [fullAddress, setFullAddress] = useState("-");
+  // FOR DETAIL ADDRESS
+  useEffect(() => {
+    if (detailInvoice.address_id.length > 0) {
+      // SET LOADING
+      dispatch({ type: "SET_LOADING", value: true });
+      axiosInstance
+        .get(`/address/${detailInvoice.address_id}/detail`)
+        .then((respones) => {
+          // console.log("Address", respones.data);
+          const { address, village, district, regency, province, passcode } =
+            respones.data.data;
+          setFullAddress(
+            `${address} ${village.name} ${district.name} ${regency.name} ${province.name} ${passcode}`
+          );
+        })
+        .catch((error) => {
+          const message = error.response?.data?.message;
+
+          toast(handleErrorMessage(message), {
+            position: toast.POSITION.TOP_RIGHT,
+            type: toast.TYPE.ERROR,
+          });
+        })
+        .finally(() => {
+          dispatch({ type: "SET_LOADING", value: false });
+        });
+    }
+  }, [detailInvoice, dispatch]);
+
   const [address, setAddress] = useState({
     _id: "",
     name: "",
@@ -65,7 +103,10 @@ export default function CardCheckout() {
     }
   }
 
-  function handleCheckout() {
+  // POPUP CHECKOUT
+  const [show, setShow] = useState(false);
+
+  function handlePayNow() {
     const cart = dataCart.map((cart) => {
       return {
         name: cart.name,
@@ -81,59 +122,127 @@ export default function CardCheckout() {
       address,
       total,
     };
-    console.log("Checkout", dataCheckout);
+
+    // SET LOADING
+    dispatch({ type: "SET_LOADING", value: true });
+    axiosInstance
+      .post("/checkouts/new", dataCheckout)
+      .then((response) => {
+        const invoice = response.data.data.invoice;
+
+        toast("Checkout Success", {
+          position: toast.POSITION.TOP_RIGHT,
+          type: toast.TYPE.SUCCESS,
+        });
+
+        setShow(false);
+        navigate(`/invoice/${invoice}`);
+      })
+      .catch((error) => {
+        const message = error.response?.data?.message;
+        toast(handleErrorMessage(message), {
+          position: toast.POSITION.TOP_RIGHT,
+          type: toast.TYPE.ERROR,
+        });
+      })
+      .finally(() => {
+        dispatch({ type: "SET_LOADING", value: false });
+      });
   }
 
   return (
-    <Card className="w-100">
-      <Card.Body>
-        <Form.Label htmlFor="form-addres" className=" fw-bold">
-          Address
-        </Form.Label>
-        <Form.Select
-          id="form-address"
-          value={address._id}
-          onChange={handleChangeAddress}
-        >
-          <option value="">Select Your Address</option>
-          {optionAddress.map((address, index) => (
-            <option key={`option-address-${index}`} value={address._id}>
-              {address.name}
-            </option>
-          ))}
-        </Form.Select>
-        <Card.Text className="my-2">{fullAddress}</Card.Text>
+    <>
+      <Card className="w-100">
+        <Card.Body>
+          <Form.Label htmlFor="form-addres" className=" fw-bold">
+            Address
+          </Form.Label>
 
-        <div className="d-flex justify-content-between align-items-center mb-2">
-          <Card.Subtitle className="fw-medium">Subtotal</Card.Subtitle>
-          <Card.Subtitle className="fw-medium">
-            {formatCurrency(subTotal)}
-          </Card.Subtitle>
-        </div>
+          {isCheckout ? (
+            <>
+              <Form.Select
+                id="form-address"
+                value={address._id}
+                onChange={handleChangeAddress}
+              >
+                <option value="">Select Your Address</option>
+                {optionAddress.map((address, index) => (
+                  <option key={`option-address-${index}`} value={address._id}>
+                    {address.name}
+                  </option>
+                ))}
+              </Form.Select>
+              <Card.Text className="my-2">{fullAddress}</Card.Text>
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <Card.Subtitle className="fw-medium">Subtotal</Card.Subtitle>
+                <Card.Subtitle className="fw-medium">
+                  {formatCurrency(subTotal)}
+                </Card.Subtitle>
+              </div>
 
-        <div className="d-flex justify-content-between align-items-center mb-2">
-          <Card.Subtitle className="fw-medium">PPN (10%)</Card.Subtitle>
-          <Card.Subtitle className="fw-medium">
-            {formatCurrency(ppn)}
-          </Card.Subtitle>
-        </div>
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <Card.Subtitle className="fw-medium">PPN (10%)</Card.Subtitle>
+                <Card.Subtitle className="fw-medium">
+                  {formatCurrency(ppn)}
+                </Card.Subtitle>
+              </div>
 
-        <div className="d-flex justify-content-between align-items-center mb-2">
-          <Card.Subtitle className="fw-medium">Total</Card.Subtitle>
-          <Card.Subtitle className="fw-medium">
-            {formatCurrency(total)}
-          </Card.Subtitle>
-        </div>
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <Card.Subtitle className="fw-medium">Total</Card.Subtitle>
+                <Card.Subtitle className="fw-medium">
+                  {formatCurrency(total)}
+                </Card.Subtitle>
+              </div>
+              <Button
+                disabled={address._id.length === 0 || total === 0}
+                variant="primary"
+                className="w-100"
+                onClick={() => setShow(true)}
+              >
+                Checkout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Card.Text className="my-2">{fullAddress}</Card.Text>
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <Card.Subtitle className="fw-medium">Subtotal</Card.Subtitle>
+                <Card.Subtitle className="fw-medium">
+                  {formatCurrency(detailInvoice.subTotal)}
+                </Card.Subtitle>
+              </div>
 
-        <Button
-          disabled={address._id.length === 0}
-          color=" primary"
-          className="w-100"
-          onClick={handleCheckout}
-        >
-          Checkout
-        </Button>
-      </Card.Body>
-    </Card>
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <Card.Subtitle className="fw-medium">PPN (10%)</Card.Subtitle>
+                <Card.Subtitle className="fw-medium">
+                  {formatCurrency(detailInvoice.ppn)}
+                </Card.Subtitle>
+              </div>
+
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <Card.Subtitle className="fw-medium">Total</Card.Subtitle>
+                <Card.Subtitle className="fw-medium">
+                  {formatCurrency(detailInvoice.total)}
+                </Card.Subtitle>
+              </div>
+              <Button
+                variant="success"
+                className="w-100"
+                // onClick={() => setShow(true)}
+              >
+                Confirm Payment
+              </Button>
+            </>
+          )}
+        </Card.Body>
+      </Card>
+
+      {/* POPUP CHECKOUT */}
+      <PopupCheckout
+        show={show}
+        handleClose={() => setShow(false)}
+        handlePayNow={handlePayNow}
+      />
+    </>
   );
 }
