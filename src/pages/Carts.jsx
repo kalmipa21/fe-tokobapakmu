@@ -37,6 +37,7 @@ export default function Cart() {
                   key={`item-cart-${cart._id}`}
                   index={index}
                   cart={cart}
+                  isActive
                 />
               ))
             ) : (

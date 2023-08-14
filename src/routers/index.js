@@ -15,6 +15,7 @@ import Products from "../pages/customer/Products";
 import Login from "../pages/Login";
 import Register from "../pages/customer/Register";
 import Carts from "../pages/Carts";
+import Invoices from "../pages/customer/Invoices";
 
 //Layout Auth
 import LayoutAuth from "../Layouts/LayoutAuth";
@@ -31,9 +32,7 @@ export default createBrowserRouter(
       {/* Layout Product */}
       <Route
         element={
-          <LayoutAuth auth={auth}>
-            <LayoutProducts />
-          </LayoutAuth>
+          <LayoutAuth auth={auth} children={<LayoutProducts />}></LayoutAuth>
         }
       >
         <Route path="/" element={<Products />} />
@@ -48,6 +47,7 @@ export default createBrowserRouter(
         }
       >
         <Route path="/Carts" element={<Carts />} />
+        <Route path="/invoice/:code" element={<Invoices />} />
       </Route>
 
       {/* Login and register page */}

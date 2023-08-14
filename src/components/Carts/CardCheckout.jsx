@@ -14,7 +14,9 @@ export default function CardCheckout(props) {
 
   const {
     isCheckout = true,
+    isStatus = true,
     detailInvoice = { address_id: "", subTotal: 0, ppn: 0, total: 0 },
+    handleConfirmPayment = () => {},
   } = props;
   const [optionAddress, setOptionAddress] = useState([]);
   const [fullAddress, setFullAddress] = useState("-");
@@ -225,13 +227,15 @@ export default function CardCheckout(props) {
                   {formatCurrency(detailInvoice.total)}
                 </Card.Subtitle>
               </div>
-              <Button
-                variant="success"
-                className="w-100"
-                // onClick={() => setShow(true)}
-              >
-                Confirm Payment
-              </Button>
+              {!isStatus && (
+                <Button
+                  variant="success"
+                  className="w-100"
+                  onClick={handleConfirmPayment}
+                >
+                  Confirm Payment
+                </Button>
+              )}
             </>
           )}
         </Card.Body>
