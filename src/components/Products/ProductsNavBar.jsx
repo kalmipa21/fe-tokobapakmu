@@ -22,7 +22,7 @@ function ProductsNavBar() {
   const { dataCart } = useSelector((state) => state.carts);
   const dispatch = useDispatch();
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate();
   //   const headers = { Authorization: `Basic ${token}` };
 
   // TOTAL QTY ON CART
@@ -79,8 +79,11 @@ function ProductsNavBar() {
       });
   }
 
+  function handleProfile() {
+    navigate("/profile");
+  }
+
   // HANDLE TO PAGE CART
-  const navigate = useNavigate();
   function handleToCartsPage() {
     navigate("/carts");
   }
@@ -137,6 +140,13 @@ function ProductsNavBar() {
                 >
                   <i className="bi bi-cart-fill"></i>
                   <span className="sub__heading__5 ms-2">{countQty}</span>
+                </Button>
+                <Button
+                  variant="outline-light"
+                  className="mx-2"
+                  onClick={handleProfile}
+                >
+                  Profile
                 </Button>
                 <Button variant="light" onClick={handleLogout}>
                   Logout
