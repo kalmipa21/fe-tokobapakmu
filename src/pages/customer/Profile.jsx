@@ -1,6 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import ABreadCrumbs from "../../components/ABreadCrumbs";
 import AListGroup from "../../components/AListGroup";
+import CardProfile from "../../components/Profile/CardProfile";
 
 export default function Profile() {
   const options = [
@@ -35,11 +36,12 @@ export default function Profile() {
       <Col xs="12">
         <ABreadCrumbs options={options} />
       </Col>
-
       <Col md="3">
         <AListGroup menus={menus} />
       </Col>
-      <Col md="9">Kanan</Col>
+      <Col md="9">
+        <CardProfile />
+      </Col>
     </Row>
   );
 }
