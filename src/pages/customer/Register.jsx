@@ -10,7 +10,7 @@ import handleErrorMessage from "../../utils/handleErrorMessage.js";
 import { useDispatch } from "react-redux";
 
 const validationSchema = Yup.object({
-  full_name: Yup.string().required("Field is required").max(30),
+  full_name: Yup.string().required("Field is required").min(3).max(30),
   email: Yup.string().required("Field is required").email(),
   password: Yup.string().required("Field is required").min(8).max(20),
 });
