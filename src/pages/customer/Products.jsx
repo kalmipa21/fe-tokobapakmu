@@ -34,10 +34,10 @@ export default function Products() {
 
       axiosInstance
         .get("/products", { params: { ...storeParamsProduct } })
-        .then((responese) => {
-          setData(responese.data.data);
+        .then((response) => {
+          setData(response.data.data);
 
-          setPagination(responese.data.pagination);
+          setPagination(response.data.pagination);
         })
         .catch((error) => {
           const message = error.response?.data?.message;
