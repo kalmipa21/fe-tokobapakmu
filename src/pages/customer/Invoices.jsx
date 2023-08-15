@@ -129,7 +129,7 @@ export default function Invoices() {
         </Col>
         <Col md="8" sm="12" xs="12">
           <div
-            style={{ height: "25rem", overflowY: "auto" }}
+            style={{ height: "calc(100vh - 21.5rem)", overflowY: "auto" }}
             className="mb-2 border-bottom"
           >
             {cartInvoice.map((cart, index) => (

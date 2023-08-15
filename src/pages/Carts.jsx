@@ -28,7 +28,7 @@ export default function Cart() {
         </Col>
         <Col md="8" sm="12" xs="12">
           <div
-            style={{ height: "25rem", overflowY: "auto" }}
+            style={{ height: "calc(100vh - 14rem)", overflowY: "auto" }}
             className="mb-2 border-bottom"
           >
             {storeCarts.dataCart.length ? (
