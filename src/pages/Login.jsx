@@ -148,7 +148,7 @@ export default function Login() {
           </Form>
 
           <p className="text__5 text-center mb-0">
-            Don't have an account? Please <Link to="/login">register</Link>
+            Don't have an account? Please <Link to="/register">register</Link>
           </p>
         </Card.Body>
       </Card>
