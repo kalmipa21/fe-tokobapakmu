@@ -42,7 +42,7 @@ export default function Invoices() {
       // SET LOADING
       dispatch({ type: "SET_LOADING", value: true });
       axiosInstance
-        .get(`/checkouts/${code}/detail`)
+        .get(`/api/checkouts/${code}/detail`)
         .then((response) => {
           //   console.log("RES", response.data.data);
           setData(response.data.data);
@@ -73,7 +73,7 @@ export default function Invoices() {
     // SET LOADING
     dispatch({ type: "SET_LOADING", value: true });
     axiosInstance
-      .put(`/checkouts/${code}/confirm`, { status: true })
+      .put(`/api/checkouts/${code}/confirm`, { status: true })
       .then((response) => {
         setConfirmed(true);
       })

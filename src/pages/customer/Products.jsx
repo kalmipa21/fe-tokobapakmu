@@ -33,7 +33,7 @@ export default function Products() {
       dispatch({ type: "SET_LOADING", value: true });
 
       axiosInstance
-        .get("/products", { params: { ...storeParamsProduct } })
+        .get("/api/products", { params: { ...storeParamsProduct } })
         .then((response) => {
           setData(response.data.data);
 

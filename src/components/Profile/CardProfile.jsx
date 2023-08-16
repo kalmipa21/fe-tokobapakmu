@@ -43,7 +43,7 @@ export default function CardProfile() {
       // SET LOADING
       dispatch({ type: "SET_LOADING", value: true });
       axiosInstance
-        .get(`users/${_id}/detail`)
+        .get(`/api/users/${_id}/detail`)
         .then((response) => {
           const detail = response.data.data;
 
@@ -79,7 +79,7 @@ export default function CardProfile() {
     // SET LOADING
     dispatch({ type: "SET_LOADING", value: true });
     axiosInstance
-      .put(`users/${_id}/update`, formData)
+      .put(`/api/users/${_id}/update`, formData)
       .then((response) => {
         toast(response.data.message, {
           position: toast.POSITION.TOP_RIGHT,
