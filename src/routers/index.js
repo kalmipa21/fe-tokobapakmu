@@ -19,6 +19,7 @@ import Register from "../pages/customer/Register";
 import Carts from "../pages/Carts";
 import Invoices from "../pages/customer/Invoices";
 import Profile from "../pages/customer/Profile";
+import History from "../pages/customer/History";
 
 //Layout Auth
 import LayoutAuth from "../Layouts/LayoutAuth";
@@ -60,6 +61,7 @@ export default createBrowserRouter(
         }
       >
         <Route path="/profile" element={<Profile />} />
+        <Route path="/history" element={<History />} />
       </Route>
 
       {/* Login and register page */}
