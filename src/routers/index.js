@@ -20,6 +20,7 @@ import Carts from "../pages/Carts";
 import Invoices from "../pages/customer/Invoices";
 import Profile from "../pages/customer/Profile";
 import History from "../pages/customer/History";
+import Address from "../pages/customer/Address";
 
 //Layout Auth
 import LayoutAuth from "../Layouts/LayoutAuth";
@@ -62,6 +63,7 @@ export default createBrowserRouter(
       >
         <Route path="/profile" element={<Profile />} />
         <Route path="/history" element={<History />} />
+        <Route path="/address" element={<Address />} />
       </Route>
 
       {/* Login and register page */}
