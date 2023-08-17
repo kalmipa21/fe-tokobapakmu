@@ -12,14 +12,14 @@ export default function PopupCheckout(props) {
         </p>
         <div className="d-flex justify-content-between align-items-center">
           <Button
-            style={{ width: "8rem" }}
+            style={{ width: "7rem" }}
             variant="danger"
             onClick={handleClose}
           >
             Cancel
           </Button>
           <Button
-            style={{ width: "8rem" }}
+            style={{ width: "7rem" }}
             variant="success"
             onClick={handlePayNow}
           >
