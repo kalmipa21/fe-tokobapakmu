@@ -44,7 +44,6 @@ export default function Invoices() {
       axiosInstance
         .get(`/api/checkouts/${code}/detail`)
         .then((response) => {
-          //   console.log("RES", response.data.data);
           setData(response.data.data);
           const carts = response.data.data.cart;
           const address = response.data.data.address;

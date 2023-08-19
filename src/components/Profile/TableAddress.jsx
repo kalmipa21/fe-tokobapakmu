@@ -5,7 +5,6 @@ export default function TableAddress({ list, handleDeleteAddress = () => {} }) {
   const navigate = useNavigate();
 
   function handleEditAddress(_id) {
-    console.log("EDIT", _id);
     navigate(`/address/edit/${_id}`);
   }
 
