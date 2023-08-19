@@ -21,6 +21,8 @@ import Invoices from "../pages/customer/Invoices";
 import Profile from "../pages/customer/Profile";
 import History from "../pages/customer/History";
 import Address from "../pages/customer/Address";
+import CreateAddress from "../components/Profile/FormsAddress/Create";
+import EditAddress from "../components/Profile/FormsAddress/Edit";
 
 //Layout Auth
 import LayoutAuth from "../Layouts/LayoutAuth";
@@ -64,6 +66,8 @@ export default createBrowserRouter(
         <Route path="/profile" element={<Profile />} />
         <Route path="/history" element={<History />} />
         <Route path="/address" element={<Address />} />
+        <Route path="/address/create" element={<CreateAddress />} />
+        <Route path="/address/edit/:id" element={<EditAddress />} />
       </Route>
 
       {/* Login and register page */}

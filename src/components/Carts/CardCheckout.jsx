@@ -36,7 +36,6 @@ export default function CardCheckout(props) {
       axiosInstance
         .get("/api/address/all")
         .then((respones) => {
-          // console.log("Address", respones.data);
           setOptionAddress(respones.data.data);
         })
         .catch((error) => {
@@ -61,7 +60,6 @@ export default function CardCheckout(props) {
       axiosInstance
         .get(`/api/address/${detailInvoice.address_id}/detail`)
         .then((respones) => {
-          // console.log("Address", respones.data);
           const { address, village, district, regency, province, passcode } =
             respones.data.data;
           setFullAddress(
@@ -101,7 +99,6 @@ export default function CardCheckout(props) {
       setFullAddress(
         `${findAddressByID.address} ${findAddressByID.village.name} ${findAddressByID.regency.name} ${findAddressByID.district.name} ${findAddressByID.province.name} ${findAddressByID.passcode}`
       );
-      console.log("Address", findAddressByID);
     }
   }
 
