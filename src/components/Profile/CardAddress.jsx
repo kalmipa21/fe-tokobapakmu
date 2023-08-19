@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { PaginationControl } from "react-bootstrap-pagination-control";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 import TableAddress from "./TableAddress";
 import handleErrorMessage from "../../utils/handleErrorMessage";
@@ -10,6 +11,11 @@ import { axiosInstance } from "../../configs/https";
 
 export default function CardAddress() {
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+  function handleCreateAddress() {
+    navigate("/address/create");
+  }
 
   const [isLoad, setIsLoad] = useState(true);
   const [dataAddress, setDataAddress] = useState([]);
@@ -51,7 +57,6 @@ export default function CardAddress() {
       axiosInstance
         .get("/api/address/all", { params: { ...params } })
         .then((response) => {
-          console.log("ADDRESS", response.data);
           setDataAddress(response.data.data);
           setTotalData(response.data.pagination.total);
         })
@@ -70,12 +75,34 @@ export default function CardAddress() {
     }
   }, [isLoad, dispatch, params, dataAddress]);
 
+  function handleDeleteAddress(id) {
+    // SET LOADING
+    dispatch({ type: "SET_LOADING", value: true });
+
+    axiosInstance
+      .delete(`/api/address/${id}/delete`)
+      .then((response) => {
+        setIsLoad(true);
+      })
+      .catch((error) => {
+        const message = error.response?.data?.message;
+        toast(handleErrorMessage(message), {
+          position: toast.POSITION.TOP_RIGHT,
+          type: toast.TYPE.SUCCESS,
+        });
+      })
+      .finally(() => {
+        // SET LOADING
+        dispatch({ type: "SET_LOADING", value: false });
+      });
+  }
+
   return (
     <Card>
       <Card.Body>
         <Row>
           {/* SORT, SEARCH AND CREATE */}
-          <Col lg="9" md="12" sm="12">
+          <Col lg="9" md="12" sm="12" className="pe-0">
             <Form onSubmit={handleSubmit}>
               <InputGroup>
                 <Form.Select
@@ -101,18 +128,23 @@ export default function CardAddress() {
             </Form>
           </Col>
 
-          <Col lg="3" md="12" sm="12">
+          <Col lg="3" md="12" sm="12" className="ps-0">
             <Button
               variant="success"
+              onClick={handleCreateAddress}
               className=" text-truncate w-100 mt-lg-0 mt-2 rounded-start-0"
             >
+              Create
               <i className="bi bi-pencil-fill"></i>
             </Button>
           </Col>
 
           {/* TABLE */}
           <Col xs="12" className="mt-md-0 mt-2">
-            <TableAddress list={dataAddress} />
+            <TableAddress
+              list={dataAddress}
+              handleDeleteAddress={handleDeleteAddress}
+            />
           </Col>
 
           {/* PAGINATION */}

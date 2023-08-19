@@ -1,11 +1,12 @@
 import { Button, Table } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
-export default function TableAddress({ list }) {
+export default function TableAddress({ list, handleDeleteAddress = () => {} }) {
+  const navigate = useNavigate();
+
   function handleEditAddress(_id) {
     console.log("EDIT", _id);
-  }
-  function handleDeleteAddress(_id) {
-    console.log("DELETE", _id);
+    navigate(`/address/edit/${_id}`);
   }
 
   return (
