@@ -18,7 +18,7 @@ export default function CardCheckout(props) {
     detailInvoice = { address_id: "", subTotal: 0, ppn: 0, total: 0 },
     handleConfirmPayment = () => {},
   } = props;
-  const [optionAddress, setOptionAddress] = useState([]);
+  const [optionAddress, setOptionAddress] = useState(null);
   const [fullAddress, setFullAddress] = useState("-");
 
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ export default function CardCheckout(props) {
 
   // FOR OPTION ADDRESS
   useEffect(() => {
-    if (!optionAddress.length && isCheckout) {
+    if (optionAddress === null && isCheckout) {
       // SET LOADING
       dispatch({ type: "SET_LOADING", value: true });
       axiosInstance
@@ -165,11 +165,12 @@ export default function CardCheckout(props) {
                 onChange={handleChangeAddress}
               >
                 <option value="">Select Your Address</option>
-                {optionAddress.map((address, index) => (
-                  <option key={`option-address-${index}`} value={address._id}>
-                    {address.name}
-                  </option>
-                ))}
+                {optionAddress &&
+                  optionAddress.map((address, index) => (
+                    <option key={`option-address-${index}`} value={address._id}>
+                      {address.name}
+                    </option>
+                  ))}
               </Form.Select>
               <Card.Text className="my-2">{fullAddress}</Card.Text>
               <div className="d-flex justify-content-between align-items-center mb-2">
