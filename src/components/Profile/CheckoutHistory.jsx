@@ -103,7 +103,7 @@ export default function CheckoutHistory() {
         </InputGroup>
       </Form>
 
-      {!dataCheckouts.length ? (
+      {!isLoad && !dataCheckouts.length ? (
         <div
           className=" d-flex justify-content-center align-items-center"
           style={{ height: "cacl(100vh - 18rem)", overflowY: "auto" }}
