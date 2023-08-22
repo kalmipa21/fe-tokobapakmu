@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+// eslint-disable-next-line react-hooks/exhaustive-deps
 import { Card, Col, Row, Form, Button } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -51,72 +53,13 @@ const validationSchema = Yup.object({
 });
 
 export default function FormsAddress({ isEdit = false, detail = {} }) {
+  const dispatch = useDispatch();
   // FORMIK
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: handleOnSubmit,
   });
-
-  // PROPS DETAIL
-  useEffect(() => {
-    if (isEdit && JSON.stringify(detail) !== "{}") {
-      formik.setFieldValue("name", detail.name);
-      formik.setFieldValue("address", detail.address);
-      formik.setFieldValue("passcode", detail.passcode);
-      setIsLoadProvince(true);
-      getOptionsDistrict(detail.regency._id);
-      getOptionsVillage(detail.district._id);
-
-      handleChangeProvince(
-        { target: { name: "province._id", value: detail.province._id } },
-        "province.name"
-      );
-      handleChangeRegency(
-        { target: { name: "regency._id", value: detail.regency._id } },
-        "regency.name"
-      );
-      handleChangeDistrict(
-        { target: { name: "district._id", value: detail.district._id } },
-        "district.name"
-      );
-      handleChangeVillage(
-        { target: { name: "village._id", value: detail.village._id } },
-        "village.name"
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEdit, detail]);
-
-  const dispatch = useDispatch();
-
-  const [isLoadProvince, setIsLoadProvince] = useState(true);
-  const [dataProvince, setDataProvince] = useState([]);
-
-  useEffect(() => {
-    if (isLoadProvince) {
-      // SET LOADING
-      dispatch({ type: "SET_LOADING", value: true });
-
-      axiosInstance
-        .get("/api-wilayah/provinces.json")
-        .then((response) => {
-          setDataProvince(response.data);
-        })
-        .catch((error) => {
-          const message = error.response?.data?.message;
-          toast(handleErrorMessage(message), {
-            position: toast.POSITION.TOP_RIGHT,
-            type: toast.TYPE.ERROR,
-          });
-        })
-        .finally(() => {
-          // SET LOADING
-          dispatch({ type: "SET_LOADING", value: false });
-          setIsLoadProvince(false);
-        });
-    }
-  }, [isLoadProvince, dispatch]);
 
   function handleIsError(key, sub_key) {
     if (sub_key)
@@ -129,6 +72,80 @@ export default function FormsAddress({ isEdit = false, detail = {} }) {
 
     return formik.touched[key] && formik.errors[key];
   }
+
+  const fetchData = useCallback(async () => {
+    // SET LOADING
+    dispatch({ type: "SET_LOADING", value: true });
+
+    formik.setFieldValue("name", detail.name);
+    formik.setFieldValue("address", detail.address);
+    formik.setFieldValue("passcode", detail.passcode);
+
+    await setIsLoadProvince();
+    formik.setFieldValue("province", {
+      _id: detail.province._id,
+      name: detail.province.name,
+    });
+
+    await getOptionsRegency(detail.province._id);
+    formik.setFieldValue("regency", {
+      _id: detail.regency._id,
+      name: detail.regency.name,
+    });
+
+    await getOptionsDistrict(detail.regency._id);
+    formik.setFieldValue("district", {
+      _id: detail.district._id,
+      name: detail.district.name,
+    });
+
+    await getOptionsVillage(detail.district._id);
+    formik.setFieldValue("village", {
+      _id: detail.village._id,
+      name: detail.village.name,
+    });
+
+    dispatch({ type: "SET_LOADING", value: false });
+  }, [detail, dispatch]);
+
+  // PROPS DETAIL
+  useEffect(() => {
+    if (isEdit && JSON.stringify(detail) !== "{}") {
+      fetchData();
+    }
+  }, [isEdit, detail, fetchData]);
+
+  const [isLoadProvince, setIsLoadProvince] = useState(true);
+  const [dataProvince, setDataProvince] = useState([]);
+
+  async function getOptionProvince() {
+    // SET LOADING
+    dispatch({ type: "SET_LOADING", value: true });
+
+    return axiosInstance
+      .get(`${process.env.REACT_APP_BASE_URL}/provinces`)
+      .then((response) => {
+        setDataProvince(response.data.data);
+      })
+      .catch((error) => {
+        const message = error.response?.data?.message;
+        toast(handleErrorMessage(message), {
+          position: toast.POSITION.TOP_RIGHT,
+          type: toast.TYPE.ERROR,
+        });
+      })
+      .finally(() => {
+        // SET LOADING
+        dispatch({ type: "SET_LOADING", value: false });
+        setIsLoadProvince(false);
+      });
+  }
+
+  useEffect(() => {
+    if (isLoadProvince) {
+      getOptionProvince();
+    }
+  }, [isLoadProvince, isEdit, getOptionProvince]);
 
   function handleChangeProvince(event, key) {
     formik.setFieldValue(event.target.name, event.target.value);
@@ -144,14 +161,14 @@ export default function FormsAddress({ isEdit = false, detail = {} }) {
 
   // REGENCY
   const [dataRegency, setDataRegency] = useState([]);
-  function getOptionsRegency(id) {
+  async function getOptionsRegency(id) {
     // SET LOADING
     dispatch({ type: "SET_LOADING", value: true });
 
-    axiosInstance
-      .get(`/api-wilayah/regencies/${id}.json`)
+    return axiosInstance
+      .get(`${process.env.REACT_APP_BASE_URL}/regencies/${id}`)
       .then((response) => {
-        setDataRegency(response.data);
+        setDataRegency(response.data.data);
       })
       .catch((error) => {
         const message = error.response?.data?.message;
@@ -172,21 +189,23 @@ export default function FormsAddress({ isEdit = false, detail = {} }) {
       (regency) => regency.id === event.target.value
     );
     formik.setFieldValue(key, findByID ? findByID.name : "");
+
     if (findByID) getOptionsDistrict(findByID.id);
+
     formik.setFieldValue("district", { _id: "", name: "" });
     formik.setFieldValue("village", { _id: "", name: "" });
   }
 
   // DISTRICT
   const [dataDistrict, setDataDistrict] = useState([]);
-  function getOptionsDistrict(id) {
+  async function getOptionsDistrict(id) {
     // SET LOADING
     dispatch({ type: "SET_LOADING", value: true });
 
-    axiosInstance
-      .get(`/api-wilayah/districts/${id}.json`)
+    return axiosInstance
+      .get(`${process.env.REACT_APP_BASE_URL}/districts/${id}`)
       .then((response) => {
-        setDataDistrict(response.data);
+        setDataDistrict(response.data.data);
       })
       .catch((error) => {
         const message = error.response?.data?.message;
@@ -213,14 +232,14 @@ export default function FormsAddress({ isEdit = false, detail = {} }) {
 
   // VILLAGE
   const [dataVillage, setDataVillage] = useState([]);
-  function getOptionsVillage(id) {
+  async function getOptionsVillage(id) {
     // SET LOADING
     dispatch({ type: "SET_LOADING", value: true });
 
-    axiosInstance
-      .get(`/api-wilayah/villages/${id}.json`)
+    return axiosInstance
+      .get(`${process.env.REACT_APP_BASE_URL}/villages/${id}`)
       .then((response) => {
-        setDataVillage(response.data);
+        setDataVillage(response.data.data);
       })
       .catch((error) => {
         const message = error.response?.data?.message;
@@ -247,9 +266,7 @@ export default function FormsAddress({ isEdit = false, detail = {} }) {
 
   function handleOnSubmit(values) {
     if (!isEdit) createAddress(values);
-    else {
-      editAddress(values);
-    }
+    else editAddress(values);
   }
 
   function createAddress(payload) {
