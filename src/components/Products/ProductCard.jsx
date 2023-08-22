@@ -35,13 +35,17 @@ export default function ProductCard(props) {
         variant="top"
         src={product.image ? product.image.url : defaultImg}
         alt={`product-${product.name}`}
-        className=" object-fit-cover"
-        height={"250px"}
+        className="object-fit-cover"
+        height={"100px"}
       />
       <Card.Body>
-        <Card.Subtitle className="text__2">{product.name}</Card.Subtitle>
-        <Card.Text className="text__4 my-2">{product.category.name}</Card.Text>
-        <Card.Title className="sub__heading__2 my-2">
+        <Card.Subtitle className="text__2 text-truncate">
+          {product.name}
+        </Card.Subtitle>
+        <Card.Text className="text__4 my-2 text-truncate">
+          {product.category.name}
+        </Card.Text>
+        <Card.Title className="sub__heading__3 my-2">
           {formatCurrency(product.price)}
         </Card.Title>
         <Button
