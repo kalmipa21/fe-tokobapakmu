@@ -8,7 +8,7 @@ export default function ASelect({
   handleBlur,
   handleChange = () => {},
   keyChange,
-  option,
+  option = [],
   isError,
   msgErorr,
 }) {
@@ -26,11 +26,12 @@ export default function ASelect({
         className={isError && "border-danger"}
       >
         <option value="">Select Province</option>
-        {option.map((item) => (
-          <option key={`option-${item.name}`} value={item.id}>
-            {item.name}
-          </option>
-        ))}
+        {option.length &&
+          option.map((item) => (
+            <option key={`option-${item.name}`} value={item.id}>
+              {item.name}
+            </option>
+          ))}
       </Form.Select>
 
       {isError && <small className=" text-danger text__5">{msgErorr}</small>}
