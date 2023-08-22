@@ -55,7 +55,7 @@ export default function CardAddress() {
       dispatch({ type: "SET_LOADING", value: true });
 
       axiosInstance
-        .get(`/${process.env.REACT_APP_BASE_URL}/address/all`, {
+        .get(`${process.env.REACT_APP_BASE_URL}/address/all`, {
           params: { ...params },
         })
         .then((response) => {
@@ -82,7 +82,7 @@ export default function CardAddress() {
     dispatch({ type: "SET_LOADING", value: true });
 
     axiosInstance
-      .delete(`/${process.env.REACT_APP_BASE_URL}/address/${id}/delete`)
+      .delete(`${process.env.REACT_APP_BASE_URL}/address/${id}/delete`)
       .then((response) => {
         setIsLoad(true);
       })

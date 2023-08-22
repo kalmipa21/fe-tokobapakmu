@@ -43,7 +43,7 @@ export default function CardProfile() {
       // SET LOADING
       dispatch({ type: "SET_LOADING", value: true });
       axiosInstance
-        .get(`/${process.env.REACT_APP_BASE_URL}/users/${_id}/detail`)
+        .get(`${process.env.REACT_APP_BASE_URL}/users/${_id}/detail`)
         .then((response) => {
           const detail = response.data.data;
 
@@ -79,7 +79,7 @@ export default function CardProfile() {
     // SET LOADING
     dispatch({ type: "SET_LOADING", value: true });
     axiosInstance
-      .put(`/${process.env.REACT_APP_BASE_URL}/users/${_id}/update`, formData)
+      .put(`${process.env.REACT_APP_BASE_URL}/users/${_id}/update`, formData)
       .then((response) => {
         toast(response.data.message, {
           position: toast.POSITION.TOP_RIGHT,

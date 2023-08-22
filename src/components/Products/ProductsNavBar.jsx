@@ -53,7 +53,7 @@ function ProductsNavBar() {
 
     dispatch({ type: "SET_LOADING", value: true });
     axiosInstance
-      .post(`/${process.env.REACT_APP_BASE_URL}/users/${_id}/logout`)
+      .post(`${process.env.REACT_APP_BASE_URL}/users/${_id}/logout`)
       .then((response) => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");

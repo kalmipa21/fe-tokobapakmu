@@ -42,7 +42,7 @@ export default function Invoices() {
       // SET LOADING
       dispatch({ type: "SET_LOADING", value: true });
       axiosInstance
-        .get(`/${process.env.REACT_APP_BASE_URL}/checkouts/${code}/detail`)
+        .get(`${process.env.REACT_APP_BASE_URL}/checkouts/${code}/detail`)
         .then((response) => {
           setData(response.data.data);
           const carts = response.data.data.cart;
@@ -72,7 +72,7 @@ export default function Invoices() {
     // SET LOADING
     dispatch({ type: "SET_LOADING", value: true });
     axiosInstance
-      .put(`/${process.env.REACT_APP_BASE_URL}/checkouts/${code}/confirm`, {
+      .put(`${process.env.REACT_APP_BASE_URL}/checkouts/${code}/confirm`, {
         status: true,
       })
       .then((response) => {

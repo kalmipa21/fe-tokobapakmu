@@ -33,7 +33,7 @@ export default function Products() {
       dispatch({ type: "SET_LOADING", value: true });
 
       axiosInstance
-        .get(`/${process.env.REACT_APP_BASE_URL}/products`, {
+        .get(`${process.env.REACT_APP_BASE_URL}/products`, {
           params: { ...storeParamsProduct },
         })
         .then((response) => {
