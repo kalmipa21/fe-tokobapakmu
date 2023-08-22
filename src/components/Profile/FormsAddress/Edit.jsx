@@ -53,7 +53,7 @@ export default function EditAddress() {
     dispatch({ type: "SET_LOADING", value: true });
 
     axiosInstance
-      .get(`/api/address/${id}/detail`)
+      .get(`/${process.env.REACT_APP_BASE_URL}/address/${id}/detail`)
       .then((response) => {
         setDetail(response.data.data);
       })

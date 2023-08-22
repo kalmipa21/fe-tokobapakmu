@@ -55,7 +55,9 @@ export default function CheckoutHistory() {
       dispatch({ type: "SET_LOADING", value: true });
 
       axiosInstance
-        .get(`/api/checkouts/${_id}/history`, { params: { ...params } })
+        .get(`/${process.env.REACT_APP_BASE_URL}/checkouts/${_id}/history`, {
+          params: { ...params },
+        })
         .then((response) => {
           setDataCheckouts(response.data.data.data);
           setTotalExpense(response.data.data.incomes);

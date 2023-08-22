@@ -256,7 +256,7 @@ export default function FormsAddress({ isEdit = false, detail = {} }) {
     // SET LOADING
     dispatch({ type: "SET_LOADING", value: true });
     axiosInstance
-      .post("/api/address/new", payload)
+      .post(`/${process.env.REACT_APP_BASE_URL}/address/new`, payload)
       .then((response) => {
         navigate("/address");
         toast(response.data.message, {
@@ -281,7 +281,10 @@ export default function FormsAddress({ isEdit = false, detail = {} }) {
     // SET LOADING
     dispatch({ type: "SET_LOADING", value: true });
     axiosInstance
-      .put(`/api/address/${detail._id}/update`, payload)
+      .put(
+        `/${process.env.REACT_APP_BASE_URL}/address/${detail._id}/update`,
+        payload
+      )
       .then((response) => {
         navigate("/address");
         toast(response.data.message, {

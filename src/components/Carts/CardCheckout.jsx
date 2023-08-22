@@ -34,7 +34,7 @@ export default function CardCheckout(props) {
       // SET LOADING
       dispatch({ type: "SET_LOADING", value: true });
       axiosInstance
-        .get("/api/address/all")
+        .get(`/${process.env.REACT_APP_BASE_URL}/address/all`)
         .then((respones) => {
           setOptionAddress(respones.data.data);
         })
@@ -58,7 +58,9 @@ export default function CardCheckout(props) {
       // SET LOADING
       dispatch({ type: "SET_LOADING", value: true });
       axiosInstance
-        .get(`/api/address/${detailInvoice.address_id}/detail`)
+        .get(
+          `/${process.env.REACT_APP_BASE_URL}/address/${detailInvoice.address_id}/detail`
+        )
         .then((respones) => {
           const { address, village, district, regency, province, passcode } =
             respones.data.data;
@@ -125,7 +127,7 @@ export default function CardCheckout(props) {
     // SET LOADING
     dispatch({ type: "SET_LOADING", value: true });
     axiosInstance
-      .post("/api/checkouts/new", dataCheckout)
+      .post(`/${process.env.REACT_APP_BASE_URL}/checkouts/new`, dataCheckout)
       .then((response) => {
         const invoice = response.data.data.invoice;
 

@@ -40,7 +40,7 @@ export default function Register() {
     dispatch({ type: "SET_LOADING", value: true });
 
     axiosInstance
-      .post("/api/users/register", form)
+      .post(`/${process.env.REACT_APP_BASE_URL}/users/register`, form)
       .then((response) => {
         const message = response.data.message;
         toast(handleErrorMessage(message), {

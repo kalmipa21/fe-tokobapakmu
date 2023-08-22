@@ -55,7 +55,9 @@ export default function CardAddress() {
       dispatch({ type: "SET_LOADING", value: true });
 
       axiosInstance
-        .get("/api/address/all", { params: { ...params } })
+        .get(`/${process.env.REACT_APP_BASE_URL}/address/all`, {
+          params: { ...params },
+        })
         .then((response) => {
           setDataAddress(response.data.data);
           setTotalData(response.data.pagination.total);
@@ -80,7 +82,7 @@ export default function CardAddress() {
     dispatch({ type: "SET_LOADING", value: true });
 
     axiosInstance
-      .delete(`/api/address/${id}/delete`)
+      .delete(`/${process.env.REACT_APP_BASE_URL}/address/${id}/delete`)
       .then((response) => {
         setIsLoad(true);
       })
