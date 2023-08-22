@@ -2,15 +2,15 @@
 import { useState, useEffect } from "react";
 import { Row, Col, Form } from "react-bootstrap";
 import { PaginationControl } from "react-bootstrap-pagination-control";
-import ProductCard from "../../components/Products/ProductCard";
+import ProductCard from "../components/Products/ProductCard";
 import { toast } from "react-toastify";
-import handleErrorMessage from "../../utils/handleErrorMessage";
+import handleErrorMessage from "../utils/handleErrorMessage";
 
-import { axiosInstance } from "../../configs/https";
+import { axiosInstance } from "../configs/https";
 
 import { useDispatch, useSelector } from "react-redux";
 
-export default function Products() {
+export default function ProductsDisplay() {
   const storeParamsProduct = useSelector((state) => state.product);
   const storeLoading = useSelector((state) => state.loading);
   const [data, setData] = useState([]);
@@ -33,7 +33,7 @@ export default function Products() {
       dispatch({ type: "SET_LOADING", value: true });
 
       axiosInstance
-        .get(`${process.env.REACT_APP_BASE_URL}/products`, {
+        .get(`${process.env.REACT_APP_BASE_URL}/products/display`, {
           params: { ...storeParamsProduct },
         })
         .then((response) => {

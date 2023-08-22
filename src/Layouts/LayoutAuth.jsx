@@ -4,7 +4,9 @@ const LayoutAuth = ({ auth, children }) => {
   const { token, user } = auth;
   const location = useLocation();
 
-  const isPage = ["/login", "/register"].includes(location.pathname);
+  const isPage = ["/login", "/register", "/display"].includes(
+    location.pathname
+  );
 
   if (user.role && ["admin"].includes(user.role.name)) {
     localStorage.removeItem("user");
@@ -16,7 +18,7 @@ const LayoutAuth = ({ auth, children }) => {
   if (!token) {
     if (isPage) return children;
 
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/display" replace />;
   }
   if (token && isPage) return <Navigate to="/" replace />;
   return children;

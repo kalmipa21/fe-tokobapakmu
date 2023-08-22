@@ -23,6 +23,7 @@ import History from "../pages/customer/History";
 import Address from "../pages/customer/Address";
 import CreateAddress from "../components/Profile/FormsAddress/Create";
 import EditAddress from "../components/Profile/FormsAddress/Edit";
+import ProductsDisplay from "../pages/ProductsDisplay";
 
 //Layout Auth
 import LayoutAuth from "../Layouts/LayoutAuth";
@@ -36,6 +37,14 @@ const { auth } = stores.getState();
 export default createBrowserRouter(
   createRoutesFromElements(
     <Route element={<App />}>
+      {/* Layout Display Product */}
+      <Route
+        element={
+          <LayoutAuth auth={auth} children={<LayoutProducts />}></LayoutAuth>
+        }
+      >
+        <Route path="/display" element={<ProductsDisplay />} />
+      </Route>
       {/* Layout Product */}
       <Route
         element={
