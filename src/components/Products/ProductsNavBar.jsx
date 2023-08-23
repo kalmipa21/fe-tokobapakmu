@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { axiosInstance } from "../../configs/https";
+import defaultImage from "../../assets/images/profile.png";
 import { toast } from "react-toastify";
 import handleErrorMessage from "../../utils/handleErrorMessage";
 
@@ -11,9 +12,10 @@ import {
   InputGroup,
   Nav,
   Navbar,
+  Image,
 } from "react-bootstrap";
 import "../../assets/css/cust-navbar.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function ProductsNavBar() {
   // STORE AUTH
@@ -28,6 +30,37 @@ function ProductsNavBar() {
   // TOTAL QTY ON CART
   const itemQty = dataCart.map((item) => item.qty);
   const countQty = itemQty.reduce((a, b) => a + b, 0);
+
+  // FULL_NAME AND PHOTO
+  const [isLoad, setIsLoad] = useState(true);
+
+  const _id = user._id;
+  const [imageProfile, setImageProfile] = useState(null);
+  const [fullName, setFullName] = useState(null);
+  useEffect(() => {
+    if (isLoad && token) {
+      // SET LOADING
+      dispatch({ type: "SET_LOADING", value: true });
+      axiosInstance
+        .get(`${process.env.REACT_APP_BASE_URL}/users/${_id}/detail`)
+        .then((response) => {
+          const detail = response.data.data;
+          setImageProfile(detail.image.url);
+          setFullName(detail.full_name);
+        })
+        .catch((error) => {
+          const message = error.response?.data?.message;
+          toast(handleErrorMessage(message), {
+            position: toast.POSITION.TOP_RIGHT,
+            type: toast.TYPE.ERROR,
+          });
+        })
+        .finally(() => {
+          dispatch({ type: "SET_LOADING", value: false });
+          setIsLoad(false);
+        });
+    }
+  }, [isLoad, dispatch, _id, token]);
 
   // STATE
   const [params, setParams] = useState({
@@ -46,37 +79,6 @@ function ProductsNavBar() {
     dispatch({ type: "ACTION_PAGE", value: 1 });
     dispatch({ type: "ACTION_SORT_BY", value: params.sort_by });
     dispatch({ type: "ACTION_SEARCH", value: params.q });
-  }
-
-  function handleLogout() {
-    const _id = user._id;
-
-    dispatch({ type: "SET_LOADING", value: true });
-    axiosInstance
-      .post(`${process.env.REACT_APP_BASE_URL}/users/${_id}/logout`)
-      .then((response) => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-
-        const message = response.data.message;
-        toast(handleErrorMessage(message), {
-          position: toast.POSITION.TOP_RIGHT,
-          type: toast.TYPE.SUCCESS,
-        });
-        // TO PAGE LOGIN
-        window.location.href = "/login";
-      })
-      .catch((error) => {
-        const message = error.response?.data?.message;
-
-        toast(handleErrorMessage(message), {
-          position: toast.POSITION.TOP_RIGHT,
-          type: toast.TYPE.ERROR,
-        });
-      })
-      .finally(() => {
-        dispatch({ type: "SET_LOADING", value: false });
-      });
   }
 
   function handleProfile() {
@@ -141,15 +143,22 @@ function ProductsNavBar() {
                   <i className="bi bi-cart-fill"></i>
                   <span className="sub__heading__5 ms-2">{countQty}</span>
                 </Button>
+
                 <Button
-                  variant="outline-light"
-                  className="mx-2"
+                  size="sm"
+                  variant="light"
+                  className="text__5 d-md-inline-flex align-items-center rounded-5"
                   onClick={handleProfile}
                 >
-                  Profile
-                </Button>
-                <Button variant="light" onClick={handleLogout}>
-                  Logout
+                  <Image
+                    src={imageProfile ? imageProfile : defaultImage}
+                    className=" w-full mx-auto me-2"
+                    style={{
+                      objectFit: "contain",
+                      height: "20px",
+                    }}
+                  ></Image>
+                  {fullName}
                 </Button>
               </>
             ) : (

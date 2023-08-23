@@ -64,8 +64,8 @@ export default function Products() {
           <Col
             key={`product-${index}`}
             className="mb-4"
-            lg="2"
-            md="3"
+            xl="2"
+            lg="3"
             sm="6"
             xs="12"
           >

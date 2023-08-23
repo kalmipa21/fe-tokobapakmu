@@ -45,7 +45,7 @@ export default function ProductsDisplay() {
           const message = error.response?.data?.message;
           toast(handleErrorMessage(message), {
             position: toast.POSITION.TOP_RIGHT,
-            type: toast.TYPE.SUCCESS,
+            type: toast.TYPE.ERROR,
           });
         })
         .finally(() => {
@@ -64,7 +64,8 @@ export default function ProductsDisplay() {
           <Col
             key={`product-${index}`}
             className="mb-4"
-            lg="2"
+            xl="2"
+            lg="3"
             md="3"
             sm="6"
             xs="12"

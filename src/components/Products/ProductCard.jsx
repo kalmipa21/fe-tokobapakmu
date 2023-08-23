@@ -69,7 +69,7 @@ export default function ProductCard(props) {
             <Card.Text className="text__4 my-2 text-truncate">
               {product.category.name}
             </Card.Text>
-            <Card.Title className="sub__heading__3 my-2">
+            <Card.Title className="md-sub__heading__4 sub__heading__3 my-2">
               {formatCurrency(product.price)}
             </Card.Title>
             <Button
@@ -84,16 +84,4 @@ export default function ProductCard(props) {
       )}
     </>
   );
-  //   : (
-  //     <Card style={{ width: "18rem" }}>
-  //       <Card.Img variant="top" src={defaultImg} />
-  //       <Card.Body>
-  //         <Placeholder as={Card.Title} animation="glow">
-  //           <Placeholder xs={12} />
-  //           <Placeholder xs={5} />
-  //           <Placeholder xs={8} />
-  //         </Placeholder>
-  //       </Card.Body>
-  //     </Card>
-  //   );
 }

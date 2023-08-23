@@ -40,11 +40,15 @@ export default createBrowserRouter(
       {/* Layout Display Product */}
       <Route
         element={
-          <LayoutAuth auth={auth} children={<LayoutProducts />}></LayoutAuth>
+          <LayoutProducts
+            auth={auth}
+            children={<LayoutProducts />}
+          ></LayoutProducts>
         }
       >
         <Route path="/display" element={<ProductsDisplay />} />
       </Route>
+
       {/* Layout Product */}
       <Route
         element={
