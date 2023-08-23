@@ -464,7 +464,7 @@ export default function FormsAddress({ isEdit = false, detail = {} }) {
                   id="address"
                   name="address"
                   type="text"
-                  placeholder="Post Code"
+                  placeholder="Put your address"
                   value={formik.values.address}
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
