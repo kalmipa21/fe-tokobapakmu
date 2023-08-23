@@ -32,8 +32,8 @@ export default function ItemCart(props) {
   }
   return (
     <Card className=" mb-2">
-      <Card.Body className="d-flex justify-content-between align-items-center">
-        <div className=" d-flex align-items-center">
+      <Card.Body className="d-flex justify-content-sm-between align-items-center">
+        <div className=" d-lg-flex align-items-center justify-content-evenly col-6">
           <Image
             src={cart.image.url}
             alt={`product-${cart.name}`}
@@ -43,33 +43,35 @@ export default function ItemCart(props) {
           />
           <h6 className="ms-2">{cart.name}</h6>
         </div>
-        {!isActive && <span className=" mx-2">x{cart.qty}</span>}
-        <h6>{formatCurrency(cart.sub_total)}</h6>
+        <div className="d-lg-flex align-items-center col-6 justify-content-sm-evenly">
+          {!isActive && <span className=" mx-2">x{cart.qty}</span>}
+          <h6 className="">{formatCurrency(cart.sub_total)}</h6>
 
-        {isActive && (
-          <div>
-            <Button
-              size="sm"
-              disabled={cart.qty < 2}
-              variant={cart.qty < 2 ? "secondary" : "primary"}
-              onClick={handleSubtPerItem}
-            >
-              <i className="bi bi-dash"></i>
-            </Button>
-            <span className=" mx-2">{cart.qty}</span>
-            <Button size="sm" variant="primary" onClick={handleAddPerItem}>
-              <i className="bi bi-plus"></i>
-            </Button>
-            <Button
-              size="sm"
-              variant="danger"
-              className=" ms-2"
-              onClick={handleDeleteByIndex}
-            >
-              <i className="bi bi-trash3-fill"></i>
-            </Button>
-          </div>
-        )}
+          {isActive && (
+            <div className="">
+              <Button
+                size="sm"
+                disabled={cart.qty < 2}
+                variant={cart.qty < 2 ? "secondary" : "primary"}
+                onClick={handleSubtPerItem}
+              >
+                <i className="bi bi-dash"></i>
+              </Button>
+              <span className=" mx-2">{cart.qty}</span>
+              <Button size="sm" variant="primary" onClick={handleAddPerItem}>
+                <i className="bi bi-plus"></i>
+              </Button>
+              <Button
+                size="sm"
+                variant="danger"
+                className=" ms-2"
+                onClick={handleDeleteByIndex}
+              >
+                <i className="bi bi-trash3-fill"></i>
+              </Button>
+            </div>
+          )}
+        </div>
       </Card.Body>
     </Card>
   );
