@@ -45,10 +45,10 @@ export default function ItemCart(props) {
         </div>
         <div className="d-lg-flex align-items-center col-6 justify-content-sm-evenly">
           {!isActive && <span className=" mx-2">x{cart.qty}</span>}
-          <h6 className="">{formatCurrency(cart.sub_total)}</h6>
+          <h6>{formatCurrency(cart.sub_total)}</h6>
 
           {isActive && (
-            <div className="">
+            <div>
               <Button
                 size="sm"
                 disabled={cart.qty < 2}
