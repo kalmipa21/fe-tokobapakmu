@@ -1,4 +1,20 @@
-# Getting Started with Create React App
+## Tokobapakmu
+Sebuah e-commerce yang menjual perlengkapan gaming dan gadget keren lainnya.
+Dapat dilihat pada live display [berikut](https://fe-tokobapakmu.vercel.app/).
+## Stack
+- ReactJS
+- HTML
+- Bootsrap
+- React Bootstrap
+- React Redux
+- React Router Dom
+- React Toastify
+- Redux
+- Formik
+- Yup
+- Axios
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
