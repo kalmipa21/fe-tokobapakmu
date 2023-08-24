@@ -25,7 +25,7 @@ export default function ASelect({
         onChange={(event) => handleChange(event, keyChange)}
         className={isError && "border-danger"}
       >
-        <option value="">Select Province</option>
+        <option value="">Select {label}</option>
         {option.length &&
           option.map((item) => (
             <option key={`option-${item.name}`} value={item.id}>
